@@ -101,7 +101,7 @@ header {
     visibility: visible;
 }
 
-.edit-btn {
+.edit-btn, .delete-btn {
     width: 32px;
     height: 32px;
     border: none;
@@ -120,6 +120,12 @@ header {
     .edit-btn:hover {
         background: var(--base-transparent-100);
         transform: scale(1.05);
+    }
+
+    .delete-btn:hover {
+        background: #ff5252;
+        transform: scale(1.05);
+        color: white;
     }
 
 dialog {
