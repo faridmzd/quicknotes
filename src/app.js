@@ -1,4 +1,5 @@
 ﻿let notes = []
+let editingNoteId = null
 
 function loadNotes() {
     const savedNotes = localStorage.getItem('quickNotes')
@@ -11,11 +12,24 @@ function saveNote(event) {
     const title = document.getElementById('noteTitle').value.trim();
     const content = document.getElementById('noteContent').value.trim();
 
-    notes.unshift({
-        id: generateId(),
-        title: title,
-        content: content
-    })
+    if (editingNoteId) {
+        // Update existing Note
+
+        const noteIndex = notes.findIndex(note => note.id === editingNoteId)
+        notes[noteIndex] = {
+            ...notes[noteIndex],
+            title: title,
+            content: content
+        }
+
+    } else {
+        // Add New Note
+        notes.unshift({
+            id: generateId(),
+            title: title,
+            content: content
+        })
+    }
 
     closeNoteDialog()
     saveNotes()
@@ -49,7 +63,7 @@ function renderNotes() {
       <h3 class="note-title">${note.title}</h3>
       <p class="note-content">${note.content}</p>
       <div class="note-actions">
-        <button class="edit-btn" title="Edit Note">
+        <button class="edit-btn" onclick="openNoteDialog('${note.id}')" title="Edit Note">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
           </svg>
@@ -65,12 +79,25 @@ function openNoteDialog(noteId = null) {
     const titleInput = document.getElementById('noteTitle');
     const contentInput = document.getElementById('noteContent');
 
-    document.getElementById('dialogTitle').textContent = 'Add New Note'
-    titleInput.value = ''
-    contentInput.value = ''
+    if (noteId) {
+        // Edit Mode
+        const noteToEdit = notes.find(note => note.id === noteId)
+        editingNoteId = noteId
+        document.getElementById('dialogTitle').textContent = 'Edit Note'
+        titleInput.value = noteToEdit.title
+        contentInput.value = noteToEdit.content
+    }
+    else {
+        // Add Mode
+        editingNoteId = null
+        document.getElementById('dialogTitle').textContent = 'Add New Note'
+        titleInput.value = ''
+        contentInput.value = ''
+    }
 
     dialog.showModal()
     titleInput.focus()
+
 }
 
 function closeNoteDialog() {
