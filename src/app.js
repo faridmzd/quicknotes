@@ -5,6 +5,31 @@ function loadNotes() {
     return savedNotes ? JSON.parse(savedNotes) : []
 }
 
+function saveNote(event) {
+    event.preventDefault()
+
+    const title = document.getElementById('noteTitle').value.trim();
+    const content = document.getElementById('noteContent').value.trim();
+
+    notes.unshift({
+        id: generateId(),
+        title: title,
+        content: content
+    })
+
+    closeNoteDialog()
+    saveNotes()
+    renderNotes()
+}
+
+function generateId() {
+    return Date.now().toString()
+}
+
+function saveNotes() {
+    localStorage.setItem('quickNotes', JSON.stringify(notes))
+}
+
 function renderNotes() {
     const notesContainer = document.getElementById('notesContainer');
 
@@ -13,7 +38,7 @@ function renderNotes() {
       <div class="empty-state">
         <h2>No notes yet</h2>
         <p>Create your first note to get started!</p>
-        <button class="add-note-btn" >+ Add Your First Note</button>
+        <button class="add-note-btn" onclick="openNoteDialog()">+ Add Your First Note</button>
       </div>
     `
         return
@@ -27,6 +52,31 @@ function renderNotes() {
     `).join('')
 }
 
+function openNoteDialog(noteId = null) {
+    const dialog = document.getElementById('noteDialog');
+    const titleInput = document.getElementById('noteTitle');
+    const contentInput = document.getElementById('noteContent');
+
+    document.getElementById('dialogTitle').textContent = 'Add New Note'
+    titleInput.value = ''
+    contentInput.value = ''
+
+    dialog.showModal()
+    titleInput.focus()
+}
+
+function closeNoteDialog() {
+    document.getElementById('noteDialog').close()
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    notes = loadNotes()
     renderNotes()
+
+    document.getElementById('noteForm').addEventListener('submit', saveNote)
+    document.getElementById('noteDialog').addEventListener('click', function (event) {
+        if (event.target === this) {
+            closeNoteDialog()
+        }
+    })
 })
