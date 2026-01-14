@@ -16,6 +16,16 @@
     --base-transparent-100: rgba(247, 247, 247, 1);
 }
 
+.dark-theme {
+    --brand-color: #8b90ff;
+    --base-color: #1e1f26;
+    --surface-color: #2c2f38;
+    --text-color: #f0f0f0;
+    --secondary-text-color: #b0b3c0;
+    --base-transparent-90: rgba(30, 31, 38, 0.9);
+    --base-transparent-100: rgba(30, 31, 38, 1);
+}
+
 body {
     font-family: Poppins, sans-serif;
     margin: 2rem;
@@ -25,6 +35,10 @@ body {
 
 h1 {
     margin-bottom: 1rem;
+}
+
+button, input, textarea {
+    font: inherit;
 }
 
 header {
@@ -65,6 +79,7 @@ header {
         background: var(--brand-color);
         color: white;
     }
+
 
 .notes-grid {
     display: grid;
