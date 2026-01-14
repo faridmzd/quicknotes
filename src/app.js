@@ -44,6 +44,12 @@ function saveNotes() {
     localStorage.setItem('quickNotes', JSON.stringify(notes))
 }
 
+function deleteNote(noteId) {
+    notes = notes.filter(note => note.id != noteId)
+    saveNotes()
+    renderNotes()
+}
+
 function renderNotes() {
     const notesContainer = document.getElementById('notesContainer');
 
