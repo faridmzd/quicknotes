@@ -1,4 +1,9 @@
-let notes = []
+﻿let notes = []
+
+function loadNotes() {
+    const savedNotes = localStorage.getItem('quickNotes')
+    return savedNotes ? JSON.parse(savedNotes) : []
+}
 
 function renderNotes() {
     const notesContainer = document.getElementById('notesContainer');
@@ -13,6 +18,13 @@ function renderNotes() {
     `
         return
     }
+
+    notesContainer.innerHTML = notes.map(note => `
+    <div class="note-card">
+      <h3 class="note-title">${note.title}</h3>
+      <p class="note-content">${note.content}</p>
+    </div>
+    `).join('')
 }
 
 document.addEventListener('DOMContentLoaded', function () {
